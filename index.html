@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投資新手學習手冊</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --warning: #f59e0b;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding-bottom: 80px;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: white;
+    padding: 24px 16px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .header h1 { font-size: 1.4em; margin-bottom: 4px; }
+  .header p { font-size: 0.85em; opacity: 0.9; }
+
+  .progress-bar-container {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    height: 10px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    background: #fbbf24;
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .progress-text {
+    font-size: 0.8em;
+    margin-top: 6px;
+    opacity: 0.9;
+  }
+
+  .container { max-width: 600px; margin: 0 auto; padding: 16px; }
+
+  /* Tab Navigation */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .tab {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border: none;
+    background: var(--card);
+    border-radius: 20px;
+    font-size: 0.85em;
+    cursor: pointer;
+    color: var(--text-secondary);
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* Phase cards */
+  .phase { display: none; }
+  .phase.active { display: block; }
+
+  .phase-header {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .phase-header h2 { font-size: 1.15em; margin-bottom: 4px; }
+  .phase-header .duration {
+    display: inline-block;
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+
+  .phase-header .goal {
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+  }
+
+  /* Topic cards */
+  .topic-card {
+    background: var(--card);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border-left: 4px solid var(--primary);
+  }
+
+  .topic-card.completed { border-left-color: var(--success); }
+
+  .topic-header {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .topic-header:active { background: #f1f5f9; }
+
+  .topic-check {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .topic-check.checked {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+  }
+
+  .topic-title {
+    flex: 1;
+    font-size: 0.95em;
+    font-weight: 600;
+  }
+
+  .topic-arrow {
+    color: var(--text-secondary);
+    transition: transform 0.2s;
+    font-size: 0.8em;
+  }
+
+  .topic-card.open .topic-arrow { transform: rotate(90deg); }
+
+  .topic-content {
+    display: none;
+    padding: 0 16px 16px;
+    font-size: 0.9em;
+    line-height: 1.7;
+  }
+
+  .topic-card.open .topic-content { display: block; }
+
+  .topic-content h4 {
+    color: var(--primary);
+    margin: 12px 0 6px;
+    font-size: 0.95em;
+  }
+
+  .topic-content h4:first-child { margin-top: 0; }
+
+  .topic-content ul {
+    padding-left: 20px;
+    margin: 4px 0;
+  }
+
+  .topic-content li { margin: 4px 0; }
+
+  .highlight {
+    background: var(--warning-light);
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 0.9em;
+    border-left: 3px solid var(--warning);
+  }
+
+  .tip {
+    background: var(--success-light);
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 0.9em;
+    border-left: 3px solid var(--success);
+  }
+
+  .danger {
+    background: #fef2f2;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 0.9em;
+    border-left: 3px solid var(--danger);
+  }
+
+  /* Resources section */
+  .resource-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .resource-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3em;
+    flex-shrink: 0;
+  }
+
+  .resource-info h4 { font-size: 0.9em; }
+  .resource-info p { font-size: 0.8em; color: var(--text-secondary); }
+  .resource-tag {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 8px;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .tag-free { background: var(--success-light); color: var(--success); }
+  .tag-book { background: var(--primary-light); color: var(--primary); }
+  .tag-app { background: #f3e8ff; color: #7c3aed; }
+
+  /* Glossary */
+  .glossary-item {
+    background: var(--card);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .glossary-term {
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .glossary-term:active { background: #f1f5f9; }
+
+  .glossary-def {
+    display: none;
+    padding: 0 16px 14px;
+    font-size: 0.88em;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .glossary-item.open .glossary-def { display: block; }
+
+  /* Tips page */
+  .tip-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+
+  .tip-card h3 {
+    font-size: 1em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tip-card p {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Search */
+  .search-box {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.9em;
+    margin-bottom: 12px;
+    outline: none;
+    background: var(--card);
+  }
+
+  .search-box:focus { border-color: var(--primary); }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    display: flex;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+  }
+
+  .nav-item {
+    flex: 1;
+    padding: 8px 0;
+    text-align: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 0.7em;
+    transition: color 0.2s;
+    border: none;
+    background: none;
+  }
+
+  .nav-item.active { color: var(--primary); }
+  .nav-icon { font-size: 1.6em; display: block; margin-bottom: 2px; }
+
+  /* Sections */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Reset button */
+  .reset-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #fee2e2;
+    color: var(--danger);
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>投資新手學習手冊</h1>
+  <p>每天 20 分鐘，兩個月成為投資達人</p>
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="progress-text" id="progressText">學習進度：0 / 0 完成</div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <button class="nav-item active" onclick="showSection('learn')">
+    <span class="nav-icon">📖</span>學習
+  </button>
+  <button class="nav-item" onclick="showSection('glossary')">
+    <span class="nav-icon">📋</span>術語
+  </button>
+  <button class="nav-item" onclick="showSection('resources')">
+    <span class="nav-icon">🔗</span>資源
+  </button>
+  <button class="nav-item" onclick="showSection('tips')">
+    <span class="nav-icon">💡</span>守則
+  </button>
+</div>
+
+<!-- SECTION: Learn -->
+<div class="section active" id="section-learn">
+<div class="container">
+
+  <div class="tabs" id="phaseTabs">
+    <button class="tab active" onclick="showPhase(0)">基礎觀念</button>
+    <button class="tab" onclick="showPhase(1)">認識工具</button>
+    <button class="tab" onclick="showPhase(2)">投資邏輯</button>
+    <button class="tab" onclick="showPhase(3)">實戰入門</button>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="phase active" id="phase-0">
+    <div class="phase-header">
+      <h2>第一階段：打基礎</h2>
+      <span class="duration">第 1-2 週 ・ 每天 20-30 分鐘</span>
+      <p class="goal">搞懂最基本的投資術語和概念，建立正確的理財觀念</p>
+    </div>
+
+    <div class="topic-card" data-id="t1">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">什麼是股票？</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <p>股票就是一家公司的「所有權憑證」。當你買了一張台積電的股票，你就是台積電的小股東。</p>
+        <h4>重點整理</h4>
+        <ul>
+          <li><b>股價</b>：市場上買賣股票的價格，每天會變動</li>
+          <li><b>股數</b>：台股一張 = 1000 股，也可以買零股（1股起）</li>
+          <li><b>賺錢方式</b>：股價上漲賣掉賺「價差」，或是領公司發的「股利」</li>
+          <li><b>風險</b>：股價也可能下跌，最壞的情況是公司倒閉、血本無歸</li>
+        </ul>
+        <div class="highlight">簡單記：買股票 = 投資一家公司，公司賺錢你跟著賺，公司虧錢你也虧。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t2">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">什麼是債券？</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <p>債券就是你「借錢」給政府或公司，對方承諾定期還利息、到期還本金。</p>
+        <h4>重點整理</h4>
+        <ul>
+          <li><b>風險較低</b>：相比股票，債券的波動通常較小</li>
+          <li><b>報酬也較低</b>：穩定但不會暴漲</li>
+          <li><b>政府公債</b>：最安全的債券（如美國國債）</li>
+          <li><b>公司債</b>：風險比公債高一點，利息也高一點</li>
+        </ul>
+        <div class="tip">新手通常不需要自己買債券，透過 ETF 就能持有一籃子債券。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t3">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">什麼是基金和 ETF？</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <p>基金就是一群人把錢集中起來，交給專業經理人去投資。ETF 則是可以像股票一樣在股市直接買賣的基金。</p>
+        <h4>共同基金 vs ETF</h4>
+        <ul>
+          <li><b>共同基金</b>：由基金經理人主動操盤，管理費較高（約1-2%）</li>
+          <li><b>ETF</b>：通常追蹤指數（如台灣50），管理費低（約0.2-0.5%），買賣方便</li>
+        </ul>
+        <h4>為什麼新手推薦 ETF？</h4>
+        <ul>
+          <li>自動分散風險（一次買進多家公司）</li>
+          <li>費用低、透明度高</li>
+          <li>不需要研究個別公司</li>
+        </ul>
+        <div class="highlight">新手首選：0050（台灣50）、006208（富邦台50）。想領配息可以看 0056、00878。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t4">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">風險與報酬的關係</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <p>投資的核心概念：想要更高的報酬，就必須承擔更高的風險。沒有「穩賺不賠」的投資。</p>
+        <h4>風險由低到高排列</h4>
+        <ul>
+          <li>定存（幾乎零風險，但報酬最低）</li>
+          <li>政府公債</li>
+          <li>投資等級公司債</li>
+          <li>大型股 ETF（如 0050）</li>
+          <li>個股</li>
+          <li>期貨、選擇權、加密貨幣（高風險）</li>
+        </ul>
+        <div class="danger">任何人告訴你「保證獲利」都是騙局。高報酬必定伴隨高風險。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t5">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">複利的威力</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <p>複利就是「利息再產生利息」。愛因斯坦說複利是世界第八大奇蹟。</p>
+        <h4>舉例說明</h4>
+        <p>每月投入 5,000 元，年報酬率 7%：</p>
+        <ul>
+          <li><b>10 年後</b>：約 86 萬（本金 60 萬）</li>
+          <li><b>20 年後</b>：約 260 萬（本金 120 萬）</li>
+          <li><b>30 年後</b>：約 610 萬（本金 180 萬）</li>
+        </ul>
+        <div class="tip">重點不是投多少，而是「盡早開始」和「持續投入」。時間是你最大的武器。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase" id="phase-1">
+    <div class="phase-header">
+      <h2>第二階段：認識工具</h2>
+      <span class="duration">第 3-4 週 ・ 每天 20-30 分鐘</span>
+      <p class="goal">了解投資管道、產品選擇，以及開戶實務</p>
+    </div>
+
+    <div class="topic-card" data-id="t6">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">台股 vs 美股</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>台股特色</h4>
+        <ul>
+          <li>交易時間：09:00-13:30（週一到五）</li>
+          <li>可以買零股（盤後零股交易）</li>
+          <li>配息率普遍較高</li>
+          <li>開戶方便、中文介面</li>
+        </ul>
+        <h4>美股特色</h4>
+        <ul>
+          <li>全球最大市場，選擇更多</li>
+          <li>可以買到 Apple、Google、Tesla 等國際企業</li>
+          <li>一股就能買（門檻低）</li>
+          <li>交易時間台灣晚上（21:30-04:00）</li>
+        </ul>
+        <div class="highlight">新手建議：先從台股 ETF 開始，熟悉後再考慮美股。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t7">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">熱門 ETF 介紹</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>台股 ETF</h4>
+        <ul>
+          <li><b>0050</b>（元大台灣50）：追蹤台灣前50大企業，最經典</li>
+          <li><b>006208</b>（富邦台50）：和0050類似，費用更低</li>
+          <li><b>0056</b>（元大高股息）：挑選高配息股票，適合想領息的人</li>
+          <li><b>00878</b>（國泰永續高股息）：季配息，近年很熱門</li>
+        </ul>
+        <h4>美股 ETF</h4>
+        <ul>
+          <li><b>VOO</b>：追蹤美國 S&P 500 指數</li>
+          <li><b>VTI</b>：追蹤全美國股市</li>
+          <li><b>VT</b>：追蹤全世界股市</li>
+          <li><b>QQQ</b>：追蹤那斯達克100（科技股為主）</li>
+        </ul>
+        <div class="tip">選不出來？0050 + 定期定額，就是最簡單有效的策略。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t8">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">開戶與交易實務</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>台股開戶流程</h4>
+        <ul>
+          <li>選擇券商（元大、國泰、富邦、永豐等都可以）</li>
+          <li>線上或臨櫃開戶（需要身分證 + 第二證件）</li>
+          <li>開通「證券戶」+「交割銀行帳戶」</li>
+          <li>下載券商 APP 就能開始交易</li>
+        </ul>
+        <h4>交易成本</h4>
+        <ul>
+          <li><b>手續費</b>：買賣各收 0.1425%（很多券商打折到 2-6 折）</li>
+          <li><b>證交稅</b>：賣出時收 0.3%（ETF 優惠為 0.1%）</li>
+        </ul>
+        <h4>美股開戶</h4>
+        <ul>
+          <li>國內複委託（透過台灣券商買）：方便但手續費較高</li>
+          <li>海外券商（如 Firstrade、IB）：手續費低，但匯款較麻煩</li>
+        </ul>
+        <div class="highlight">新手選擇：先用國內券商就好，很多都有 APP 定期定額功能。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t9">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">稅務基本知識</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>台股稅務</h4>
+        <ul>
+          <li><b>股利所得</b>：併入綜合所得稅，或選擇分離課稅（28%）</li>
+          <li><b>價差</b>：目前台股個人買賣免課證所稅</li>
+          <li><b>二代健保</b>：單次股利超過 2 萬元要扣 2.11% 補充保費</li>
+        </ul>
+        <h4>美股稅務</h4>
+        <ul>
+          <li><b>股利</b>：美國預扣 30% 稅</li>
+          <li><b>價差</b>：海外所得，一年超過 100 萬才課稅</li>
+        </ul>
+        <div class="tip">小資族投資台股 ETF，稅的影響很小，不用太擔心。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase" id="phase-2">
+    <div class="phase-header">
+      <h2>第三階段：建立投資邏輯</h2>
+      <span class="duration">第 5-8 週 ・ 每天 15-30 分鐘</span>
+      <p class="goal">形成自己的投資策略和心態，避開常見陷阱</p>
+    </div>
+
+    <div class="topic-card" data-id="t10">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">定期定額 vs 單筆投入</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>定期定額</h4>
+        <ul>
+          <li>每月固定投入一筆錢（如每月 3000 或 5000 元）</li>
+          <li>自動分散買入時機，不用擔心買在高點</li>
+          <li>養成投資紀律，適合新手和上班族</li>
+        </ul>
+        <h4>單筆投入</h4>
+        <ul>
+          <li>一次把錢全部投入</li>
+          <li>統計上長期報酬比定期定額略高（因為資金更早進場）</li>
+          <li>但需要承受較大的心理壓力</li>
+        </ul>
+        <div class="highlight">新手推薦：定期定額。先培養紀律和心態，比追求最佳報酬更重要。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t11">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">資產配置</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <p>不要把所有雞蛋放在同一個籃子裡。資產配置就是將資金分散到不同類型的投資。</p>
+        <h4>簡單的配置公式</h4>
+        <p><b>股票比例 = 110 - 你的年齡</b></p>
+        <ul>
+          <li>25 歲：85% 股票、15% 債券</li>
+          <li>35 歲：75% 股票、25% 債券</li>
+          <li>50 歲：60% 股票、40% 債券</li>
+        </ul>
+        <h4>為什麼要配置？</h4>
+        <ul>
+          <li>股票跌的時候，債券通常會漲（反之亦然）</li>
+          <li>降低整體波動，讓你睡得著覺</li>
+          <li>年輕人可以多放股票，因為有時間等待復原</li>
+        </ul>
+        <div class="tip">最簡單的配置：一檔全市場 ETF（如 VT）+ 定期定額，什麼都不用管。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t12">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">長期投資 vs 短線交易</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>長期投資（推薦）</h4>
+        <ul>
+          <li>持有數年甚至數十年</li>
+          <li>利用複利和經濟成長賺錢</li>
+          <li>歷史證明：長期持有大盤，報酬幾乎都是正的</li>
+          <li>花的時間少、壓力小、交易成本低</li>
+        </ul>
+        <h4>短線交易（不推薦新手）</h4>
+        <ul>
+          <li>頻繁買賣，試圖抓住短期波動</li>
+          <li>統計上 80-90% 的散戶短線交易都是虧損的</li>
+          <li>手續費和稅會吃掉利潤</li>
+          <li>需要大量時間和經驗</li>
+        </ul>
+        <div class="danger">「我比別人聰明，可以靠短線賺錢」—— 這是新手最常犯的錯誤。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t13">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">投資心理學</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>你必須克服的心理陷阱</h4>
+        <ul>
+          <li><b>追高殺低</b>：看到漲就想買、看到跌就想賣 → 結果總是買貴賣便宜</li>
+          <li><b>損失厭惡</b>：虧 1 萬的痛苦感 > 賺 1 萬的快樂感，導致恐慌賣出</li>
+          <li><b>從眾效應</b>：別人都在買我也要買 → 往往是市場過熱的訊號</li>
+          <li><b>過度自信</b>：連賺幾次就以為自己是股神 → 後面通常會慘賠</li>
+        </ul>
+        <h4>如何對抗？</h4>
+        <ul>
+          <li>設定好計畫後，按計畫執行，不要感情用事</li>
+          <li>不要每天看盤，每月或每季看一次就好</li>
+          <li>大跌的時候反而應該高興，因為可以用便宜的價格買入</li>
+        </ul>
+        <div class="highlight">巴菲特名言：「別人貪婪時我恐懼，別人恐懼時我貪婪。」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase" id="phase-3">
+    <div class="phase-header">
+      <h2>第四階段：實戰入門</h2>
+      <span class="duration">第 9 週起 ・ 每週 15 分鐘檢視</span>
+      <p class="goal">開始小額投資，建立實際操作經驗</p>
+    </div>
+
+    <div class="topic-card" data-id="t14">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">投資前的準備</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>必須先完成的事</h4>
+        <ul>
+          <li>存好緊急備用金（3-6 個月生活費）</li>
+          <li>還清高利率負債（信用卡循環利息等）</li>
+          <li>確認投入的是「閒錢」（短期內不會用到的錢）</li>
+          <li>買好基本保險（至少有健保 + 意外險）</li>
+        </ul>
+        <div class="danger">千萬不要借錢投資！不要用生活費投資！不要用信用卡借款投資！</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t15">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">新手第一步行動計畫</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>Step 1：開戶</h4>
+        <p>選一家大型券商，線上開戶（約 2-3 個工作天）</p>
+        <h4>Step 2：設定定期定額</h4>
+        <p>在券商 APP 設定每月自動買入 ETF（如 0050 或 006208）</p>
+        <h4>Step 3：決定金額</h4>
+        <p>從 3,000-5,000 元/月開始就好，重點是養成習慣</p>
+        <h4>Step 4：然後呢？</h4>
+        <p>什麼都不用做！繼續學習，繼續工作賺錢，定期定額會自動執行。</p>
+        <div class="tip">最好的投資策略就是「買了之後忘記它」。越少看盤，報酬通常越好。</div>
+      </div>
+    </div>
+
+    <div class="topic-card" data-id="t16">
+      <div class="topic-header" onclick="toggleTopic(this)">
+        <div class="topic-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+        <span class="topic-title">定期檢視清單</span>
+        <span class="topic-arrow">▶</span>
+      </div>
+      <div class="topic-content">
+        <h4>每月做一次（花 15 分鐘）</h4>
+        <ul>
+          <li>確認定期定額有正常扣款</li>
+          <li>檢查帳戶餘額是否充足</li>
+          <li>記錄一下目前的總資產（可用 Excel 或記帳 APP）</li>
+        </ul>
+        <h4>每年做一次</h4>
+        <ul>
+          <li>檢視資產配置是否還符合目標</li>
+          <li>評估是否要調整每月投入金額（加薪了就多投一些）</li>
+          <li>報稅時留意股利所得的申報方式</li>
+        </ul>
+        <div class="highlight">不用每天看！投資是馬拉松，不是百米衝刺。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- SECTION: Glossary -->
+<div class="section" id="section-glossary">
+<div class="container">
+  <h2 style="margin-bottom:12px;">投資術語辭典</h2>
+  <input class="search-box" type="text" placeholder="搜尋術語..." oninput="filterGlossary(this.value)" id="glossarySearch">
+
+  <div id="glossaryList">
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">本益比（P/E Ratio）<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">股價 ÷ 每股盈餘。代表你花多少錢買一塊錢的獲利。P/E = 15 表示花15元買1元的年獲利。越低通常代表越「便宜」，但也要看產業特性。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">殖利率（Yield）<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">每年配息 ÷ 股價 × 100%。例如股價 100 元，配息 5 元，殖利率就是 5%。用來衡量買這檔股票可以領到多少比例的利息。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">市值（Market Cap）<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">股價 × 總股數 = 整家公司在市場上的「身價」。台積電市值約十幾兆台幣，是台股市值最大的公司。市值越大通常代表公司越穩定。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">配息 / 股利（Dividend）<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">公司把賺的錢分一部分給股東。分為「現金股利」（直接發錢）和「股票股利」（發股票）。不是每家公司都會配息。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">淨值（NAV）<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">基金或 ETF 的每單位真實價值。公司總資產 - 總負債 ÷ 總股數。買 ETF 時如果「市價 > 淨值」代表溢價，反之為折價。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">ETF（指數股票型基金）<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">Exchange Traded Fund 的縮寫。像買股票一樣買賣的基金，通常追蹤某個指數。一次買進一籃子股票，自動分散風險。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">定期定額（DCA）<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">Dollar-Cost Averaging。固定時間投入固定金額。股價高時買少一點、低時買多一點，自動平均成本。最適合新手的投資方式。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">大盤 / 指數<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">用來代表整體市場表現的數字。台灣的「加權指數」就是大盤，美國有「S&P 500」、「道瓊指數」。大盤漲代表市場整體上漲。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">漲停 / 跌停<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">台股每天的漲跌幅限制為 ±10%。漲停 = 漲了 10% 不能再漲。跌停 = 跌了 10% 不能再跌。美股沒有漲跌停限制。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">零股交易<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">台股一張 = 1000 股。零股交易讓你 1 股就能買。台積電一張要幾十萬，但零股只要幾百塊就能投資。盤中零股 9:00-13:30 可交易。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">交割<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">股票買賣成交後，付錢和交付股票的過程。台股 T+2（成交後第2個營業日扣款）。交割帳戶餘額不足 = 違約交割，是很嚴重的事。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">除權息<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">公司發放股利的前一天，股價會先扣掉股利的金額。例如股價 100 元、配 5 元，除息後股價變 95 元。之後股價漲回 100 元叫「填息」。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">內扣費用（費用率）<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">ETF 或基金每年從資產中扣除的管理費。0050 約 0.43%、006208 約 0.24%、美股 VOO 約 0.03%。費用越低，長期對報酬影響越小。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">資產配置<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">將資金分散到不同類型的資產（股票、債券、現金等），降低整體風險。核心概念：不把所有雞蛋放在同一個籃子裡。</div>
+    </div>
+    <div class="glossary-item" onclick="toggleGlossary(this)">
+      <div class="glossary-term">複委託<span class="topic-arrow">▶</span></div>
+      <div class="glossary-def">透過國內券商買賣海外股票。優點是方便、有中文客服。缺點是手續費較高（通常 0.15-1%）。另一個選擇是直接開海外券商帳戶。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION: Resources -->
+<div class="section" id="section-resources">
+<div class="container">
+  <h2 style="margin-bottom:12px;">推薦學習資源</h2>
+
+  <h3 style="margin: 16px 0 8px; font-size: 0.95em; color: var(--text-secondary);">YouTube 頻道</h3>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#fef3c7;">📺</div>
+    <div class="resource-info">
+      <h4>柴鼠兄弟 ZRBros</h4>
+      <p>用動畫講解投資觀念，淺顯易懂</p>
+      <span class="resource-tag tag-free">免費</span>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#fef3c7;">📺</div>
+    <div class="resource-info">
+      <h4>小資女艾蜜莉</h4>
+      <p>專注價值投資，適合小資族</p>
+      <span class="resource-tag tag-free">免費</span>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#fef3c7;">📺</div>
+    <div class="resource-info">
+      <h4>蕾咪 Rami</h4>
+      <p>理財觀念 + 生活實踐，風格輕鬆</p>
+      <span class="resource-tag tag-free">免費</span>
+    </div>
+  </div>
+
+  <h3 style="margin: 16px 0 8px; font-size: 0.95em; color: var(--text-secondary);">推薦書籍</h3>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#dbeafe;">📘</div>
+    <div class="resource-info">
+      <h4>一年投資5分鐘</h4>
+      <p>最適合懶人的長期投資指南，超好讀</p>
+      <span class="resource-tag tag-book">書籍</span>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#dbeafe;">📘</div>
+    <div class="resource-info">
+      <h4>漫步華爾街</h4>
+      <p>投資經典，講述為何指數投資長期勝出</p>
+      <span class="resource-tag tag-book">書籍</span>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#dbeafe;">📘</div>
+    <div class="resource-info">
+      <h4>富爸爸，窮爸爸</h4>
+      <p>建立財務思維，理解資產和負債的區別</p>
+      <span class="resource-tag tag-book">書籍</span>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#dbeafe;">📘</div>
+    <div class="resource-info">
+      <h4>投資最重要的事</h4>
+      <p>霍華・馬克斯的投資哲學，進階推薦</p>
+      <span class="resource-tag tag-book">書籍</span>
+    </div>
+  </div>
+
+  <h3 style="margin: 16px 0 8px; font-size: 0.95em; color: var(--text-secondary);">實用網站 & APP</h3>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#f3e8ff;">📱</div>
+    <div class="resource-info">
+      <h4>Mr. Market 市場先生</h4>
+      <p>大量入門文章，適合查資料</p>
+      <span class="resource-tag tag-free">免費</span>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#f3e8ff;">📱</div>
+    <div class="resource-info">
+      <h4>Goodinfo! 台灣股市資訊網</h4>
+      <p>查股票基本面、配息紀錄的好幫手</p>
+      <span class="resource-tag tag-free">免費</span>
+    </div>
+  </div>
+
+  <div class="resource-card">
+    <div class="resource-icon" style="background:#f3e8ff;">📱</div>
+    <div class="resource-info">
+      <h4>MoneyDJ 理財網</h4>
+      <p>基金和 ETF 的詳細資料庫</p>
+      <span class="resource-tag tag-free">免費</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION: Tips -->
+<div class="section" id="section-tips">
+<div class="container">
+  <h2 style="margin-bottom:12px;">投資黃金守則</h2>
+
+  <div class="tip-card">
+    <h3>🛡️ 守則一：先存緊急備用金</h3>
+    <p>至少準備 3-6 個月的生活費放在活存。這筆錢是「保命錢」，不能拿去投資。有了這筆錢，你才能安心地長期投資，不會因為臨時需要用錢而被迫賣在低點。</p>
+  </div>
+
+  <div class="tip-card">
+    <h3>🚫 守則二：不懂的東西不要碰</h3>
+    <p>期貨、選擇權、槓桿型 ETF、加密貨幣的衍生品⋯⋯這些工具風險極高，可能讓你虧損超過本金。在你完全理解風險之前，絕對不要碰。</p>
+  </div>
+
+  <div class="tip-card">
+    <h3>🙉 守則三：不要聽明牌</h3>
+    <p>「我朋友說 XXX 一定會漲」「群組老師報的必賺」—— 這些都不可信。如果真的穩賺不賠，別人不會告訴你。自己做功課、理解自己的投資，才是正道。</p>
+  </div>
+
+  <div class="tip-card">
+    <h3>⏰ 守則四：時間是最大的武器</h3>
+    <p>投資最重要的不是「買什麼」而是「多早開始」。25 歲開始每月投 5000 元，到 65 歲會比 35 歲開始每月投 10000 元的人擁有更多財富。這就是複利的威力。</p>
+  </div>
+
+  <div class="tip-card">
+    <h3>🧘 守則五：不要每天看盤</h3>
+    <p>越常看盤，越容易做出衝動的決定。設定好定期定額之後，每月看一次就好。記住：你是長期投資者，不是日內交易員。</p>
+  </div>
+
+  <div class="tip-card">
+    <h3>📉 守則六：大跌時不要恐慌賣出</h3>
+    <p>股市每隔幾年就會大跌一次，這是正常的。歷史上每次大跌之後都會復原並創新高。大跌反而是用便宜價格買入的好機會。記住巴菲特的話：「別人恐懼時我貪婪。」</p>
+  </div>
+
+  <div class="tip-card">
+    <h3>💰 守則七：只用閒錢投資</h3>
+    <p>千萬不要借錢投資、不要用信用卡循環利息來投資、不要把下個月的房租拿去投資。只用「就算全部賠光也不影響生活」的錢來投資。</p>
+  </div>
+
+  <div class="tip-card">
+    <h3>📝 守則八：記錄你的投資決策</h3>
+    <p>寫下你為什麼買、為什麼賣。這個習慣會幫助你回顧和成長。一年後回頭看，你會發現很多當初「很有道理」的決定其實是情緒化的。</p>
+  </div>
+
+  <button class="reset-btn" onclick="resetProgress()">重置所有學習進度</button>
+</div>
+</div>
+
+<script>
+  // State management
+  const STORAGE_KEY = 'investGuideProgress';
+
+  function loadProgress() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : {};
+    } catch { return {}; }
+  }
+
+  function saveProgress(progress) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  }
+
+  // Initialize
+  function init() {
+    const progress = loadProgress();
+    document.querySelectorAll('.topic-check').forEach(check => {
+      const card = check.closest('.topic-card');
+      const id = card.dataset.id;
+      if (progress[id]) {
+        check.classList.add('checked');
+        check.innerHTML = '✓';
+        card.classList.add('completed');
+      }
+    });
+    updateProgress();
+  }
+
+  // Toggle topic expand/collapse
+  function toggleTopic(header) {
+    const card = header.closest('.topic-card');
+    card.classList.toggle('open');
+  }
+
+  // Toggle check
+  function toggleCheck(check) {
+    const card = check.closest('.topic-card');
+    const id = card.dataset.id;
+    const progress = loadProgress();
+
+    if (check.classList.contains('checked')) {
+      check.classList.remove('checked');
+      check.innerHTML = '';
+      card.classList.remove('completed');
+      delete progress[id];
+    } else {
+      check.classList.add('checked');
+      check.innerHTML = '✓';
+      card.classList.add('completed');
+      progress[id] = true;
+    }
+
+    saveProgress(progress);
+    updateProgress();
+  }
+
+  // Update progress bar
+  function updateProgress() {
+    const total = document.querySelectorAll('.topic-card').length;
+    const done = document.querySelectorAll('.topic-check.checked').length;
+    const pct = total > 0 ? (done / total * 100) : 0;
+
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressText').textContent = `學習進度：${done} / ${total} 完成`;
+  }
+
+  // Show phase
+  function showPhase(index) {
+    document.querySelectorAll('.phase').forEach((p, i) => {
+      p.classList.toggle('active', i === index);
+    });
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      t.classList.toggle('active', i === index);
+    });
+  }
+
+  // Show section
+  function showSection(name) {
+    document.querySelectorAll('.section').forEach(s => {
+      s.classList.toggle('active', s.id === 'section-' + name);
+    });
+    document.querySelectorAll('.nav-item').forEach((n, i) => {
+      const sections = ['learn', 'glossary', 'resources', 'tips'];
+      n.classList.toggle('active', sections[i] === name);
+    });
+  }
+
+  // Glossary
+  function toggleGlossary(item) {
+    item.classList.toggle('open');
+  }
+
+  function filterGlossary(query) {
+    query = query.toLowerCase();
+    document.querySelectorAll('.glossary-item').forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = text.includes(query) ? '' : 'none';
+    });
+  }
+
+  // Reset
+  function resetProgress() {
+    if (confirm('確定要重置所有學習進度嗎？')) {
+      localStorage.removeItem(STORAGE_KEY);
+      document.querySelectorAll('.topic-check').forEach(check => {
+        check.classList.remove('checked');
+        check.innerHTML = '';
+        check.closest('.topic-card').classList.remove('completed');
+      });
+      updateProgress();
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
